@@ -25,6 +25,9 @@ public class Product {
 	
 	@ManyToOne
 	private Category category;
+	
+	public Product() {
+	}
 
 	public Long getId() {
 		return id;
@@ -65,4 +68,9 @@ public class Product {
 	public void setCategory(Category category) {
 		this.category = category;
 	}	
+	
+	@Override
+	public String toString() {
+		return String.format("[%d] %s - %s - %s", this.id, this.name, this.description, this.category.getName());
+	}
 }

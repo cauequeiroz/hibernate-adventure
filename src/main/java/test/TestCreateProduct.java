@@ -27,11 +27,9 @@ public class TestCreateProduct {
 		xbox.setPrice(new BigDecimal("1499.99"));
 		xbox.setCategory(games);		
 		
-		entityManager.getTransaction().begin();
-		
+		entityManager.getTransaction().begin();		
 		categoryDAO.save(games);
-		productDAO.save(xbox);
-		
+		productDAO.save(xbox);		
 		entityManager.getTransaction().commit();
 		
 		// Create categories

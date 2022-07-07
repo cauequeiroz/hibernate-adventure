@@ -75,11 +75,24 @@ public class Order {
 		this.items.add(item);
 		item.setOrder(this);
 		
-		// Its right?
-		this.totalPrice = this.totalPrice.add(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
+		this.totalPrice = this.totalPrice.add(item.getTotalPrice());
 	}
 	
 	public List<OrderItem> getItems() {
 		return items;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("""
+		==================================
+			Order #%d
+			
+			Client: %s
+			Date: %s
+			
+			Total: $ %s 
+		==================================
+				""", this.id, this.client.getName(), this.date, this.totalPrice);
 	}
 }

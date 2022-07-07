@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import dao.OrderDAO;
+import dto.SalesReportDTO;
 import entity.Category;
 import entity.Client;
 import entity.Order;
@@ -21,11 +23,22 @@ public class TestCreateOrder {
 		Product product = new Product();
 		product.setName("Xbox 360");
 		product.setDescription("A microsoft game console");
-		product.setPrice(new BigDecimal("1499.99"));
-		product.setCategory(category);		
+		product.setPrice(new BigDecimal("2000.00"));
+		product.setCategory(category);	
 		
-		Order order = new Order(client);
-		order.addItem(new OrderItem(2, product));
+		Product product2 = new Product();
+		product2.setName("Xbox One");
+		product2.setDescription("A microsoft game console");
+		product2.setPrice(new BigDecimal("3000.00"));
+		product2.setCategory(category);	
+		
+		Order order1 = new Order(client);
+		order1.addItem(new OrderItem(2, product));
+		order1.addItem(new OrderItem(1, product));
+		
+		Order order2 = new Order(client);
+		order2.addItem(new OrderItem(7, product));
+		order2.addItem(new OrderItem(3, product2));
 		
 		EntityManager entityManager = JPAUtil.getEntityManager();
 		
@@ -33,16 +46,19 @@ public class TestCreateOrder {
 		entityManager.persist(client);
 		entityManager.persist(category);
 		entityManager.persist(product);
-		entityManager.persist(order);
+		entityManager.persist(product2);
+		entityManager.persist(order1);
+		entityManager.persist(order2);
 		entityManager.getTransaction().commit();
 		
-		List<Order> resultList = entityManager.createQuery("SELECT o FROM Order o", Order.class).getResultList();
-		resultList.forEach(resultOrder -> {
-			System.out.println(resultOrder.getId());
-			System.out.println(resultOrder.getClient().getName());
-			System.out.println(resultOrder.getDate());
-			System.out.println(resultOrder.getTotalPrice());
-			System.out.println(resultOrder.getItems().get(0).getProduct().getName());
-		});		
+		OrderDAO orderDAO = new OrderDAO(entityManager);
+		
+		List<Order> resultList = orderDAO.getAll();
+		resultList.forEach(System.out::println);
+		
+		System.out.println(orderDAO.getTotalSalesPrice());
+		
+		List<SalesReportDTO> salesReport = orderDAO.getSalesReport();
+		salesReport.forEach(System.out::println);
 	}
 }

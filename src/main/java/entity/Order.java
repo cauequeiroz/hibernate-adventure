@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Order {
 
 	private BigDecimal totalPrice = new BigDecimal("0");
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Client client;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

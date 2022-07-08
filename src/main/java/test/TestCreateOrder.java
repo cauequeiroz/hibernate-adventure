@@ -1,6 +1,7 @@
 package test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -60,5 +61,17 @@ public class TestCreateOrder {
 		
 		List<SalesReportDTO> salesReport = orderDAO.getSalesReport();
 		salesReport.forEach(System.out::println);
+		
+		entityManager.close();
+		
+		entityManager = JPAUtil.getEntityManager();		
+		
+		Order orderById = new OrderDAO(entityManager).getById(2l);
+		entityManager.close();
+		System.out.println(orderById.getClient().getName());
+		System.out.println("===========\n\n");
+		
+		entityManager = JPAUtil.getEntityManager();	
+		new OrderDAO(entityManager).getByParametersWithCriteariaAPI(2l, LocalDate.now(), BigDecimal.ZERO);
 	}
 }
